@@ -12,10 +12,10 @@ order += "load"
 order += "cpu_temperature 0"
 order += "disk /"
 order += "disk /home"
-order += "ethernet enp1s0"
+#order += "ethernet enp1s0"
 order += "wireless wlp2s0"
 order += "volume master"
-order += "battery 1"
+order += "battery 0"
 order += "tztime local"
 
 load {
@@ -53,8 +53,7 @@ volume master {
         mixer_idx = 0
 }
 
-battery 1 {
-	last_full_capacity = true
+battery 0 {
         format = "<span background='#a3be8c'>  %status %percentage </span>"
         format_down = "No Battery"
         status_chr = "Charging"

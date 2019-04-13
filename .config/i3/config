@@ -9,9 +9,14 @@ font pango: Noto Sans 8
 floating_modifier $super
 
 #autostart
-exec --no-startup-id hsetroot -center ~/.wallpaper.png
+exec --no-startup-id setxkbmap -layout "us,bg(phonetic)"  -option "grp:ctrl_shift_toggle"
+exec --no-startup-id hsetroot -extend ~/Pictures/Wallpapers/sadkitty1.jpg
 exec --no-startup-id xsettingsd &
 exec --no-startup-id compton -b
+exec --no-startup-id /usr/bin/clipit
+exec --no-startup-id exec ~/bin/conky.sh
+exec --no-startup-id /usr/bin/python3 /usr/bin/caffeine
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # start a terminal
 bindsym $super+Return exec i3-sensible-terminal
@@ -28,15 +33,19 @@ bindsym $super+Shift+f exec thunar;workspace 3;focus
 bindsym $super+Shift+g exec geany
 
 #change volume
-bindsym XF86AudioRaiseVolume exec amixer -q set Master 5%+
-bindsym XF86AudioLowerVolume exec amixer -q set Master 5%-
-bindsym XF86AudioMute exec amixer set Master toggle
+bindsym XF86AudioRaiseVolume exec amixer -D pulse set Master 5%+
+bindsym XF86AudioLowerVolume exec amixer -D pulse set Master 5%-
+bindsym XF86AudioMute exec amixer -D pulse set Master toggle
 
 # music control
 bindsym XF86AudioNext exec mpc next
 bindsym XF86AudioPrev exec mpc prev
 bindsym XF86AudioPlay exec mpc toggle
 bindsym XF86AudioStop exec mpc stop
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec $HOME/bin/brightlight -p -i 5
+bindsym XF86MonBrightnessDown exec $HOME/bin/brightlight -p -d 5
 
 # kill focused window
 bindsym $super+c kill
@@ -63,8 +72,11 @@ bindsym $super+v split v
 # enter fullscreen mode for the focused container
 bindsym $super+f fullscreen toggle
 
-# change container layout split
-bindsym $super+s layout toggle split
+bindsym $super+s layout stacking
+bindsym $super+t layout tabbed
+bindsym Control+$super+e layout default
+
+bindsym $super+Control+s layout toggle split
 
 # toggle tiling / floating
 bindsym $super+space floating toggle
@@ -72,43 +84,73 @@ bindsym $super+space floating toggle
 # change focus between tiling / floating windows
 bindsym $super+Shift+space focus mode_toggle
 
+# firefox
+set $workspace1 "1:  "
+# terminal
+set $workspace2 "2:  "
+# 
+set $workspace3 "3:  "
+set $workspace4 "4:  "
+set $workspace5 "5:  "
+
 # switch to workspace
 bindsym $alt+Control+Right workspace next
 bindsym $alt+Control+Left workspace prev
-bindsym $super+1 workspace 1
-bindsym $super+2 workspace 2
-bindsym $super+3 workspace 3
-bindsym $super+4 workspace 4
-bindsym $super+5 workspace 5
+bindsym $super+1 workspace $workspace1
+bindsym $super+2 workspace $workspace2
+bindsym $super+3 workspace $workspace3
+bindsym $super+4 workspace $workspace4
+bindsym $super+5 workspace $workspace5
 bindsym $super+6 workspace 6
+bindsym $super+7 workspace 7
+bindsym $super+8 workspace $workspace8
+bindsym $super+9 workspace 9
+bindsym $super+0 workspace 10
+
+# workspaces from 11-20
+bindsym $super+Control+1 workspace 11
+bindsym $super+Control+2 workspace 12
+bindsym $super+Control+3 workspace 13
+bindsym $super+Control+4 workspace 14
+bindsym $super+Control+5 workspace 15
+bindsym $super+Control+6 workspace 16
+bindsym $super+Control+7 workspace 17
+bindsym $super+Control+8 workspace 18
+bindsym $super+Control+9 workspace 19
+bindsym $super+Control+0 workspace 20
 
 # move focused container to workspace
-bindsym $super+Shift+1 move container to workspace 1
-bindsym $super+Shift+2 move container to workspace 2
-bindsym $super+Shift+3 move container to workspace 3
-bindsym $super+Shift+4 move container to workspace 4
-bindsym $super+Shift+5 move container to workspace 5
+bindsym $super+Shift+1 move container to workspace $workspace1
+bindsym $super+Shift+2 move container to workspace $workspace2
+bindsym $super+Shift+3 move container to workspace $workspace3
+bindsym $super+Shift+4 move container to workspace $workspace4
+bindsym $super+Shift+5 move container to workspace $workspace5
 bindsym $super+Shift+6 move container to workspace 6
-
+bindsym $super+Shift+7 move container to workspace 7
+bindsym $super+Shift+8 move container to workspace 8
+bindsym $super+Shift+9 move container to workspace 9
+bindsym $super+Shift+0 move container to workspace 0
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $super+Shift+r restart
 
 # exit i3
-bindsym $super+q exec "i3-nagbar -t warning -m 'Really, exit?' -b 'Yes' 'i3-msg exit'"
+bindsym $super+x exec "i3-nagbar -t warning -m 'Really, exit?' -b 'Yes' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        bindsym Left resize shrink width 5 px or 5 ppt
-        bindsym Down resize grow height 5 px or 5 ppt
-        bindsym Up resize shrink height 5 px or 5 ppt
-        bindsym Right resize grow width 5 px or 5 ppt
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
         bindsym Return mode "default"
 }
 bindsym $super+r mode "resize"
 
 # panel
 bar {
-	colors {
+        font pango: Noto Sans 12px
+        strip_workspace_numbers yes
+	    colors {
         background #2f343f
         statusline #2f343f
         separator #4b5262
@@ -119,20 +161,20 @@ bar {
         inactive_workspace	#2f343f	#2f343f	#d8dee8
         urgent_workspace	#2f343f	#ebcb8b	#2f343f
     }
-        status_command i3status
+    status_command i3status
 }
 
 # window rules, you can find the window class using xprop
 for_window [class=".*"] border pixel 4
-assign [class=URxvt] 1
-assign [class=Firefox|Transmission-gtk] 2
-assign [class=Thunar|File-roller] 3
-assign [class=Geany|Evince|Gucharmap|Soffice|libreoffice*] 4
-assign [class=Audacity|Vlc|mpv|Ghb|Xfburn|Gimp*|Inkscape] 5
-assign [class=Lxappearance|System-config-printer.py|Lxtask|GParted|Pavucontrol|Exo-helper*|Lxrandr|Arandr] 6
-for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
-for_window [class=URxvt|Firefox|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
-for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
+#assign [class=URxvt] 1
+#assign [class=Firefox|Transmission-gtk] 2
+#assign [class=Thunar|File-roller] 3
+#assign [class=Geany|Evince|Gucharmap|Soffice|libreoffice*] 4
+#assign [class=Audacity|Vlc|mpv|Ghb|Xfburn|Gimp*|Inkscape] 5
+#assign [class=Lxappearance|System-config-printer.py|Lxtask|GParted|Pavucontrol|Exo-helper*|Lxrandr|Arandr] 6
+#for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
+#for_window [class=URxvt|Firefox|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
+#for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
 
 # colour of border, background, text, indicator, and child_border
 client.focused			#bf616a #2f343f #d8dee8 #bf616a #d8dee8
@@ -141,3 +183,5 @@ client.unfocused		#2f343f #2f343f #d8dee8 #2f343f #2f343f
 client.urgent			#2f343f #2f343f #d8dee8 #2f343f #2f343f
 client.placeholder		#2f343f #2f343f #d8dee8 #2f343f #2f343f
 client.background		#2f343f
+
+
